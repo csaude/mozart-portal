@@ -1,0 +1,1 @@
+buildar o pojecto mozart-portal-backend e copiar o mozart-portal-backend-0.0.1-SNAPSHOT.jar para essa pasta.
