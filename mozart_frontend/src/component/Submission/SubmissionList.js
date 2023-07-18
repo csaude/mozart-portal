@@ -15,7 +15,7 @@ function ListSubmissions(props) {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const response = await fetch("http://mozart-portal-backend:8085/api/v1/submission?page="+currentPage, {
+      const response = await fetch("http://172.16.60.1:8085/api/v1/submission?page="+currentPage, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + getAuthToken(),
