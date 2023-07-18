@@ -4,31 +4,51 @@ services:
   mysql-mozart-portal-db:
     image: mysql:8.0.33
     container_name: mysql-mozart-portal-db
+    env_file:
+      - ./mozartdb.env
     ports:
       - 49760:3306
+    networks:
+      - network
     volumes:
       - /etc/localtime:/etc/localtime
+      - ./my.cnf:/etc/mysql/my.cnf
+      - mozartPortalDataDb:/var/lib/mysql
     restart: unless-stopped
 
-  mozart-backend-service:
-    image: openjdk:8-alpine
-    command: /home/mozart/intall.sh
-    container_name: mozart-backend-service
-    network_mode: host
-    working_dir: /home/mozart
+  mozart-portal-app:
+    build:
+      context: ./mozart_frontend
+    container_name: mozart-portal-app
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./mozart_frontend/src:/app/src
+    ports:
+      - 8181:80
+    networks:
+      - network
+    depends_on:
+      - mysql-mozart-portal-db
+    restart: unless-stopped
+
+  mozart-portal-backend:
+    build:
+      context: ./mozart_backend
+    container_name: mozart-portal-backend
+    image: mozart-portal-backend-image
+    ports:
+      - 8085:8085
+    networks:
+      - network
+    working_dir: /app
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime
-      
-  app:
-    container_name: mozart-portal
-    image: mozart-portal-image
-    volumes:
-      - /etc/localtime:/etc/localtime
-    build: 
-      context: .
-    ports:
-      - 8181:3000
-    depends_on:
-      - mysql-mozart-portal-db
-    restart: unless-stopped  
+    restart: unless-stopped
+
+networks:
+    network:
+      driver: bridge
+
+volumes:
+    mozartPortalDataDb:    
