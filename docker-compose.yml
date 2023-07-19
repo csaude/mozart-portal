@@ -1,21 +1,6 @@
 version: "3.3"
 
 services:
-  mysql-mozart-portal-db:
-    image: mysql:8.0.33
-    container_name: mysql-mozart-portal-db
-    env_file:
-      - ./mozartdb.env
-    ports:
-      - 49760:3306
-    networks:
-      - network
-    volumes:
-      - /etc/localtime:/etc/localtime
-      - ./my.cnf:/etc/mysql/my.cnf
-      - mozartPortalDataDb:/var/lib/mysql
-    restart: unless-stopped
-
   mozart-portal-app:
     build:
       context: ./mozart_frontend
@@ -27,8 +12,6 @@ services:
       - 8181:80
     networks:
       - network
-    depends_on:
-      - mysql-mozart-portal-db
     restart: unless-stopped
 
   mozart-portal-backend:
@@ -48,7 +31,4 @@ services:
 
 networks:
     network:
-      driver: bridge
-
-volumes:
-    mozartPortalDataDb:    
+      driver: bridge   
