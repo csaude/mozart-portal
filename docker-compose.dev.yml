@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  mozart-portal-app:
+    build:
+      context: ./mozart_frontend
+    container_name: mozart-portal-app
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./mozart_frontend/src:/app/src
+    ports:
+      - 8181:3000
+    networks:
+      - network
+    restart: unless-stopped
+
+  mozart-portal-backend:
+    build:
+      context: ./mozart_backend
+    container_name: mozart-portal-backend
+    image: mozart-portal-backend-image
+    ports:
+      - 8085:8085
+    networks:
+      - network
+    working_dir: /app
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime
+    restart: unless-stopped
+
+networks:
+    network:
+      driver: bridge   

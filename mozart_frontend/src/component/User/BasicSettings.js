@@ -162,7 +162,7 @@ export async function action({ request }) {
     role: roleList,
   };
 
-  const response = await fetch("http://172.16.60.1:8085/api/v1/auth/sign", {
+  const response = await fetch("https://mozart.fgh.org.mz/api/v1/auth/sign", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
