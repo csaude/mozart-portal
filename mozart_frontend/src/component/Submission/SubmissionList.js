@@ -3,7 +3,8 @@ import classes from "./CSS/SubmissionList.module.css";
 import SubmissionItem from "./SubmissionItem";
 import SubmissionContext from "../../store/submission-context";
 import { getAuthToken } from "../../util/AuthToken";
-import SpinnerLoading from "../../Layout/UI/SpinnerLoading/SpinnerLoading"
+import SpinnerLoading from "../../Layout/UI/SpinnerLoading/SpinnerLoading";
+import { useSelector } from "react-redux";
 
 function ListSubmissions(props) {
   const submissionCtx = useContext(SubmissionContext);
@@ -11,6 +12,7 @@ function ListSubmissions(props) {
   const [error, setError] = useState();
   const [fetchedSubmissions, setFetchedSubmissions] = useState();
   const [currentPage, setCurrentPage] = useState(0);
+  const refreshTable = useSelector(state => state.refresh.isRefresh);
 
   useEffect(() => {
     async function fetchData() {
@@ -32,7 +34,7 @@ function ListSubmissions(props) {
     }
 
     fetchData();
-  }, [currentPage, submissionCtx.isTrue]);
+  }, [currentPage, refreshTable]);
 
   const addNewSubmission = () => {
     submissionCtx.updateMode(false);

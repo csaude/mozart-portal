@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { json, redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import ListSubmissions from "../component/Submission/SubmissionList";
 import NewSubmission from "../component/Submission/NewSubmission";
 import SubmissionProvider from "../store/SubmissionProvider";
 import { getAuthToken } from "../util/AuthToken";
+import { refreshActions } from "../store/refresh-slice";
 
 function Submission() {
   const [addSumissionIsShow, setAddSumissionIsShow] = useState(false);
+  const dispatch = useDispatch();
 
   const showAddSubmissionHandle = () => {
     setAddSumissionIsShow(true);
@@ -14,6 +17,7 @@ function Submission() {
 
   const hideAddSubmissionHandle = () => {
     setAddSumissionIsShow(false);
+    dispatch(refreshActions.toggle());
   };
 
   return (
@@ -81,6 +85,10 @@ export async function action({ request }) {
 
     if (!response.ok) {
       throw json({ message: "Could not authenticate user." }, { status: 500 });
+    }
+
+    if (response.ok){
+      window.location.reload(true);
     }
   }
 
